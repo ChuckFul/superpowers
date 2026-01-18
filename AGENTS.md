@@ -23,13 +23,13 @@ Maintain and evolve the Superpowers skill library and plugin integrations with c
 
 ### Session Handoff (rolling, mandatory)
 
-- Goal: Create an initial AGENTS.md to guide work on Superpowers skills and plugins.
-- Changes: Added AGENTS.md with mission, process, docs, guardrails, and reference map.
-- Files: AGENTS.md
-- Risks/Notes: None. No behavior changes.
-- Next: Validate instructions against current workflows; adjust if any docs/tests are missing or renamed.
-- Tests: Not run (not applicable).
-- Commit: Superpowers: add AGENTS.md workflow guide
+- Goal: Script a Codex-spawned agent run to fetch and summarize a URL via `codex exec`.
+- Changes: Added a PowerShell launcher script and ran it to spawn a Codex process with a fetch/summarize prompt.
+- Files: AGENTS.md, scripts/spawn-codex-fetch.ps1
+- Risks/Notes: Script assumes `codex exec` accepts a prompt argument; logs land in `%TEMP%\\codex-agent-output\\`.
+- Next: Inspect the spawned run output and tweak `-CodexArgs` if Codex CLI expects different flags.
+- Tests: Not run (script spawn only).
+- Commit: Superpowers: add codex spawn fetch script
 
 ## Documentation Update Directives (mandatory)
 

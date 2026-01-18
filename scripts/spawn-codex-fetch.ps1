@@ -3,16 +3,82 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$Url,
 
+    [string]$Agent,
+
+    [string]$AgentPath,
+
+    [string]$AgentRoot = (Join-Path (Split-Path $PSScriptRoot -Parent) "codex-agents"),
+
     [string]$OutputDir = (Join-Path ([System.IO.Path]::GetTempPath()) "codex-agent-output"),
 
     [string]$CodexCommand = "codex",
 
     [string[]]$CodexArgs = @(),
 
+    [string]$WorkDir,
+
     [switch]$Wait
 )
 
 $ErrorActionPreference = "Stop"
+
+if ($Agent -and $AgentPath) {
+    throw "Specify only one of -Agent or -AgentPath."
+}
+
+function Parse-TomlValue {
+    param([string]$Value)
+
+    $trimmed = $Value.Trim()
+
+    if ($trimmed.StartsWith("[")) {
+        $items = @()
+        $matches = [regex]::Matches($trimmed, '"((?:[^"\\]|\\.)*)"')
+        foreach ($match in $matches) {
+            $items += ($match.Groups[1].Value -replace '\\"', '"' -replace '\\\\', '\\')
+        }
+        return ,$items
+    }
+
+    if ($trimmed.StartsWith('"') -and $trimmed.EndsWith('"')) {
+        $inner = $trimmed.Substring(1, $trimmed.Length - 2)
+        return ($inner -replace '\\"', '"' -replace '\\\\', '\\')
+    }
+
+    if ($trimmed.StartsWith("'") -and $trimmed.EndsWith("'")) {
+        return $trimmed.Substring(1, $trimmed.Length - 2)
+    }
+
+    return $trimmed
+}
+
+function Read-AgentSpec {
+    param([string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        throw "Agent spec not found: $Path"
+    }
+
+    $spec = @{}
+    $lines = Get-Content -LiteralPath $Path
+    foreach ($line in $lines) {
+        $clean = ($line -replace '\s+#.*$', '').Trim()
+        if ([string]::IsNullOrWhiteSpace($clean)) {
+            continue
+        }
+
+        $match = [regex]::Match($clean, '^(?<key>[\w\-]+)\s*=\s*(?<value>.+)$')
+        if (-not $match.Success) {
+            continue
+        }
+
+        $key = $match.Groups["key"].Value
+        $value = Parse-TomlValue -Value $match.Groups["value"].Value
+        $spec[$key] = $value
+    }
+
+    return $spec
+}
 
 $codex = Get-Command -Name $CodexCommand -ErrorAction SilentlyContinue
 if (-not $codex) {
@@ -27,10 +93,42 @@ $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $stdoutPath = Join-Path $OutputDir ("codex-fetch-" + $timestamp + ".out.txt")
 $stderrPath = Join-Path $OutputDir ("codex-fetch-" + $timestamp + ".err.txt")
 
-$prompt = @"
+$agentSpec = $null
+$agentDir = $null
+
+if ($AgentPath) {
+    $agentPathResolved = Resolve-Path -LiteralPath $AgentPath
+    $agentDir = Split-Path -Parent $agentPathResolved.Path
+    $agentSpec = Read-AgentSpec -Path $agentPathResolved.Path
+} elseif ($Agent) {
+    $agentDir = Join-Path $AgentRoot $Agent
+    $agentSpec = Read-AgentSpec -Path (Join-Path $agentDir "agent.toml")
+}
+
+if ($agentSpec -and $agentSpec.ContainsKey("workdir") -and -not $PSBoundParameters.ContainsKey("WorkDir")) {
+    $WorkDir = $agentSpec["workdir"]
+}
+
+$prompt = $null
+if ($agentSpec -and $agentSpec.ContainsKey("prompt")) {
+    $promptPath = Join-Path $agentDir $agentSpec["prompt"]
+    if (-not (Test-Path -LiteralPath $promptPath)) {
+        throw "Prompt template not found: $promptPath"
+    }
+    $prompt = Get-Content -LiteralPath $promptPath -Raw
+}
+
+if (-not $prompt) {
+    $prompt = @"
 Fetch and read the webpage at: $Url
 Summarize the content and key points. Note any access limitations.
 "@.Trim()
+}
+
+$prompt = ($prompt -replace '\{\{\s*url\s*\}\}', $Url).Trim()
+if ($prompt -notmatch '(?i)https?://') {
+    $prompt = ($prompt.TrimEnd() + "`n`nURL: $Url")
+}
 
 function Quote-Argument {
     param([string]$Value)
@@ -49,9 +147,26 @@ function Quote-Argument {
     return '"' + ($Value -replace '"', '\"') + '"'
 }
 
+$specArgs = @()
+if ($agentSpec -and $agentSpec.ContainsKey("codex_args")) {
+    $specArgs = @($agentSpec["codex_args"])
+}
+
+$combinedArgs = @()
+$hasProfile = ($specArgs -contains "--profile") -or ($CodexArgs -contains "--profile")
+$profileValue = $null
+if ($agentSpec -and $agentSpec.ContainsKey("profile")) {
+    $profileValue = [string]$agentSpec["profile"]
+}
+if (-not $hasProfile -and -not [string]::IsNullOrWhiteSpace($profileValue)) {
+    $combinedArgs += @("--profile", $profileValue)
+}
+$combinedArgs += $specArgs
+$combinedArgs += $CodexArgs
+
 $argList = @("exec")
-if ($CodexArgs.Count -gt 0) {
-    $argList += $CodexArgs
+if ($combinedArgs.Count -gt 0) {
+    $argList += $combinedArgs
 }
 
 $useStdin = $true
@@ -81,6 +196,9 @@ $startInfo = @{
 }
 if ($useStdin) {
     $startInfo.RedirectStandardInput = $promptPath
+}
+if ($WorkDir) {
+    $startInfo.WorkingDirectory = $WorkDir
 }
 
 $process = Start-Process @startInfo

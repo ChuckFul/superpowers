@@ -23,13 +23,13 @@ Maintain and evolve the Superpowers skill library and plugin integrations with c
 
 ### Session Handoff (rolling, mandatory)
 
-- Goal: Fix the Codex spawn script to pass prompts via stdin and re-run the fetch attempt.
-- Changes: Updated the launcher to use stdin for the prompt and re-ran it against the changelog URL.
-- Files: AGENTS.md, scripts/spawn-codex-fetch.ps1
-- Risks/Notes: Codex exec reported no web access; output in `%TEMP%\\codex-agent-output\\`.
-- Next: If web access is required, run Codex with permissions/approval settings or supply the page content manually.
-- Tests: Not run (script spawn only).
-- Commit: Superpowers: fix codex spawn stdin prompt
+- Goal: Configure the web-fetch agent spec to request sandboxed network access and verify behavior.
+- Changes: Updated `codex-agents/web-fetch/agent.toml` to pass sandbox/network flags and re-ran the spawn script.
+- Files: AGENTS.md, codex-agents/web-fetch/agent.toml
+- Risks/Notes: Codex still reported `sandbox: read-only` and blocked outbound web access; likely host policy override.
+- Next: If required, set a `web-fetch` profile in `~/.codex/config.toml` and/or adjust `allowed_sandbox_modes`.
+- Tests: Spawned Codex exec; web fetch still blocked.
+- Commit: Superpowers: set web-fetch codex args
 
 ## Documentation Update Directives (mandatory)
 

@@ -23,13 +23,13 @@ Maintain and evolve the Superpowers skill library and plugin integrations with c
 
 ### Session Handoff (rolling, mandatory)
 
-- Goal: Script a Codex-spawned agent run to fetch and summarize a URL via `codex exec`.
-- Changes: Added a PowerShell launcher script and ran it to spawn a Codex process with a fetch/summarize prompt.
+- Goal: Fix the Codex spawn script to pass prompts via stdin and re-run the fetch attempt.
+- Changes: Updated the launcher to use stdin for the prompt and re-ran it against the changelog URL.
 - Files: AGENTS.md, scripts/spawn-codex-fetch.ps1
-- Risks/Notes: Script assumes `codex exec` accepts a prompt argument; logs land in `%TEMP%\\codex-agent-output\\`.
-- Next: Inspect the spawned run output and tweak `-CodexArgs` if Codex CLI expects different flags.
+- Risks/Notes: Codex exec reported no web access; output in `%TEMP%\\codex-agent-output\\`.
+- Next: If web access is required, run Codex with permissions/approval settings or supply the page content manually.
 - Tests: Not run (script spawn only).
-- Commit: Superpowers: add codex spawn fetch script
+- Commit: Superpowers: fix codex spawn stdin prompt
 
 ## Documentation Update Directives (mandatory)
 

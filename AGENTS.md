@@ -23,13 +23,13 @@ Maintain and evolve the Superpowers skill library and plugin integrations with c
 
 ### Session Handoff (rolling, mandatory)
 
-- Goal: Configure the web-fetch agent spec to request sandboxed network access and verify behavior.
-- Changes: Updated `codex-agents/web-fetch/agent.toml` to pass sandbox/network flags and re-ran the spawn script.
-- Files: AGENTS.md, codex-agents/web-fetch/agent.toml
-- Risks/Notes: Codex still reported `sandbox: read-only` and blocked outbound web access; likely host policy override.
-- Next: If required, set a `web-fetch` profile in `~/.codex/config.toml` and/or adjust `allowed_sandbox_modes`.
-- Tests: Spawned Codex exec; web fetch still blocked.
-- Commit: Superpowers: set web-fetch codex args
+- Goal: Fix agent spec parsing for multiline args and capture context on CLI web access limits.
+- Changes: Updated `scripts/spawn-codex-fetch.ps1` to support multiline TOML arrays when reading agent args.
+- Files: AGENTS.md, scripts/spawn-codex-fetch.ps1
+- Risks/Notes: Parsing remains minimal TOML support; Codex CLI web access may still be blocked by sandbox/host policy.
+- Next: Re-run the spawn script to confirm array parsing works; if web access is still blocked, try a `~/.codex/config.toml` profile with `sandbox_mode`/`network_access` or update Codex CLI.
+- Tests: Not run (no automated tests invoked).
+- Commit: Superpowers: handle multiline agent args
 
 ## Documentation Update Directives (mandatory)
 

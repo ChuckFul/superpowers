@@ -61,9 +61,22 @@ function Read-AgentSpec {
 
     $spec = @{}
     $lines = Get-Content -LiteralPath $Path
+    $pendingKey = $null
+    $pendingValue = $null
+
     foreach ($line in $lines) {
         $clean = ($line -replace '\s+#.*$', '').Trim()
         if ([string]::IsNullOrWhiteSpace($clean)) {
+            continue
+        }
+
+        if ($pendingKey) {
+            $pendingValue = ($pendingValue + " " + $clean).Trim()
+            if ($pendingValue.Contains("]")) {
+                $spec[$pendingKey] = Parse-TomlValue -Value $pendingValue
+                $pendingKey = $null
+                $pendingValue = $null
+            }
             continue
         }
 
@@ -73,8 +86,19 @@ function Read-AgentSpec {
         }
 
         $key = $match.Groups["key"].Value
-        $value = Parse-TomlValue -Value $match.Groups["value"].Value
-        $spec[$key] = $value
+        $value = $match.Groups["value"].Value
+
+        if ($value.Trim().StartsWith("[") -and -not $value.Contains("]")) {
+            $pendingKey = $key
+            $pendingValue = $value
+            continue
+        }
+
+        $spec[$key] = Parse-TomlValue -Value $value
+    }
+
+    if ($pendingKey) {
+        throw "Unclosed array value for '$pendingKey' in $Path."
     }
 
     return $spec

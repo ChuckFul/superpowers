@@ -12,7 +12,7 @@
 
 ```bash
 mkdir -p ~/.config/opencode/superpowers
-git clone https://github.com/obra/superpowers.git ~/.config/opencode/superpowers
+git clone https://github.com/ChuckFul/superpowers.git ~/.config/opencode/superpowers
 ```
 
 ### 2. Register the Plugin
@@ -131,5 +131,5 @@ When a skill references a Claude Code tool you don't have:
 
 ## Getting Help
 
-- Report issues: https://github.com/obra/superpowers/issues
-- Documentation: https://github.com/obra/superpowers
+- Report issues: https://github.com/ChuckFul/superpowers/issues
+- Documentation: https://github.com/ChuckFul/superpowers

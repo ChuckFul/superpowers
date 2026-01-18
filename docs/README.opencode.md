@@ -7,7 +7,7 @@ Complete guide for using Superpowers with [OpenCode.ai](https://opencode.ai).
 Tell OpenCode:
 
 ```
-Clone https://github.com/obra/superpowers to ~/.config/opencode/superpowers, then create directory ~/.config/opencode/plugin, then symlink ~/.config/opencode/superpowers/.opencode/plugin/superpowers.js to ~/.config/opencode/plugin/superpowers.js, then restart opencode.
+Clone https://github.com/ChuckFul/superpowers to ~/.config/opencode/superpowers, then create directory ~/.config/opencode/plugin, then symlink ~/.config/opencode/superpowers/.opencode/plugin/superpowers.js to ~/.config/opencode/plugin/superpowers.js, then restart opencode.
 ```
 
 ## Manual Installation
@@ -24,7 +24,7 @@ Clone https://github.com/obra/superpowers to ~/.config/opencode/superpowers, the
 
 ```bash
 mkdir -p ~/.config/opencode/superpowers
-git clone https://github.com/obra/superpowers.git ~/.config/opencode/superpowers
+git clone https://github.com/ChuckFul/superpowers.git ~/.config/opencode/superpowers
 ```
 
 #### 2. Register the Plugin
@@ -210,8 +210,8 @@ Restart OpenCode to load the updates.
 
 ## Getting Help
 
-- Report issues: https://github.com/obra/superpowers/issues
-- Main documentation: https://github.com/obra/superpowers
+- Report issues: https://github.com/ChuckFul/superpowers/issues
+- Main documentation: https://github.com/ChuckFul/superpowers
 - OpenCode docs: https://opencode.ai/docs/
 
 ## Testing

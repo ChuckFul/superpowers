@@ -23,13 +23,13 @@ Maintain and evolve the Superpowers skill library and plugin integrations with c
 
 ### Session Handoff (rolling, mandatory)
 
-- Goal: Fix agent spec parsing for multiline args and capture context on CLI web access limits.
-- Changes: Updated `scripts/spawn-codex-fetch.ps1` to support multiline TOML arrays when reading agent args.
-- Files: AGENTS.md, scripts/spawn-codex-fetch.ps1
-- Risks/Notes: Parsing remains minimal TOML support; Codex CLI web access may still be blocked by sandbox/host policy.
-- Next: Re-run the spawn script to confirm array parsing works; if web access is still blocked, try a `~/.codex/config.toml` profile with `sandbox_mode`/`network_access` or update Codex CLI.
-- Tests: Not run (no automated tests invoked).
-- Commit: Superpowers: handle multiline agent args
+- Goal: Capture intended Superpowers behavior in a Codex-facing analysis note.
+- Changes: Added a codex analysis summary note; updated Session Handoff.
+- Files: AGENTS.md, docs/codex-analysis/superpowers-intended-behavior.md
+- Risks/Notes: Documentation-only; no behavior changes.
+- Next: If needed, link the analysis note from README or expand with diagrams.
+- Tests: Not run (doc-only change).
+- Commit: Superpowers: add codex analysis notes
 
 ## Documentation Update Directives (mandatory)
 

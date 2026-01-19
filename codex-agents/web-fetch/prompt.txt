@@ -1,2 +1,0 @@
-Fetch and read the webpage at: {{url}}
-Summarize the content and key points. Note any access limitations.

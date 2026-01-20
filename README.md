@@ -106,6 +106,9 @@ Fetch and follow instructions from https://raw.githubusercontent.com/ChuckFul/su
 - **systematic-debugging** - 4-phase root cause process (includes root-cause-tracing, defense-in-depth, condition-based-waiting techniques)
 - **verification-before-completion** - Ensure it's actually fixed
 
+**Domain**
+- **fixing-wordform-list-processing** - WordForm OpenXML list-processing parity workflow (Phase 4 scenarios 19-24, artifact-driven)
+
 **Collaboration** 
 - **brainstorming** - Socratic design refinement
 - **writing-plans** - Detailed implementation plans

@@ -1,5 +1,13 @@
 # Superpowers Release Notes
 
+## v4.0.4 (2026-01-20)
+
+### New Skills
+
+**fixing-wordform-list-processing**
+
+Adds a WordForm list-processing skill that enforces the list-processing agent system, prioritizes Phase 4 scenarios 19-24, and requires artifact-driven diagnosis with verbose Serilog logging.
+
 ## v4.0.3 (2025-12-26)
 
 ### Improvements

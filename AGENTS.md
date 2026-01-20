@@ -23,13 +23,13 @@ Maintain and evolve the Superpowers skill library and plugin integrations with c
 
 ### Session Handoff (rolling, mandatory)
 
-- Goal: Capture intended Superpowers behavior in a Codex-facing analysis note.
-- Changes: Added a codex analysis summary note; updated Session Handoff.
-- Files: AGENTS.md, docs/codex-analysis/superpowers-intended-behavior.md
-- Risks/Notes: Documentation-only; no behavior changes.
-- Next: If needed, link the analysis note from README or expand with diagrams.
+- Goal: Add a skill to enforce the WordForm list-processing workflow and Phase 4 scenario focus.
+- Changes: Added `fixing-wordform-list-processing` skill + creation log; updated skill list and usage examples; added release note.
+- Files: skills/fixing-wordform-list-processing/SKILL.md, skills/fixing-wordform-list-processing/CREATION-LOG.md, README.md, RELEASE-NOTES.md, docs/README.codex.md, docs/README.opencode.md, AGENTS.md
+- Risks/Notes: Documentation-only; no automated tests run.
+- Next: If desired, add a skill integration test under tests/claude-code/ to validate skill trigger behavior.
 - Tests: Not run (doc-only change).
-- Commit: Superpowers: add codex analysis notes
+- Commit: Superpowers: add wordform list processing skill
 
 ## Documentation Update Directives (mandatory)
 

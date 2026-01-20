@@ -66,6 +66,12 @@ Use the `use_skill` tool to load a specific skill:
 use use_skill tool with skill_name: "superpowers:brainstorming"
 ```
 
+Example (domain workflow skill):
+
+```
+use use_skill tool with skill_name: "superpowers:fixing-wordform-list-processing"
+```
+
 Skills are automatically inserted into the conversation and persist across context compaction.
 
 ### Personal Skills

@@ -54,6 +54,12 @@ Run ~/.codex/superpowers/.codex/superpowers-codex find-skills
 Run ~/.codex/superpowers/.codex/superpowers-codex use-skill superpowers:brainstorming
 ```
 
+Example (domain workflow skill):
+
+```
+Run ~/.codex/superpowers/.codex/superpowers-codex use-skill superpowers:fixing-wordform-list-processing
+```
+
 ### Bootstrap All Skills
 
 ```

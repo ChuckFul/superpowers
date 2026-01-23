@@ -1,3 +1,6 @@
 .worktrees/
 .private-journal/
 .claude/
+
+# Session workspaces (agent handoff)
+_sessions/
